@@ -28,11 +28,6 @@ class Arduino:
         else:
             print("No active connection")
     def ring_bell(self):
-        #TEMP !!!!!!!
-        self.bellState = True
-        return
-        # ONLY FOR DEBUG REMOVE LATER!!!!!!!!
-        
         if not self.connected:
             print ("Not connected to device")
             return
@@ -40,12 +35,6 @@ class Arduino:
         self.serial.flush() 
         self.bellState = True
     def stop_bell(self):
-        #TEMP!!!!
-        self.bellState = False
-        return
-        # ONLY FOR DEBUG REMOVE LATER!!!!!!!!
-        
-        
         if not self.connected:
             print ("Not connected to device")
             return

@@ -7,7 +7,7 @@ from datetime import datetime, date
 from time import mktime
 from _datetime import MINYEAR
 
-PORT = "COM44"
+PORT = "COM1"
 BAUD = 9600
 
 class UI:
@@ -30,40 +30,94 @@ class UI:
         self.buttonSchedule5.grid(row=1, column=1, padx=25, pady=25)
         self.buttonSchedule6 = Button(self.inWindowFrame, text="Разпределение 6\n(50 min учебен час)", command=lambda:self.__activateProcess(6))
         self.buttonSchedule6.grid(row=1, column=2)
+        self.statusMessage = Label(self.inWindowFrame, text="", fg="green", font=("Helvetica", 12))
+        self.statusMessage.grid(row=2, column=0, columnspan=3, sticky=W)
         
+        self.statusMessageProcessId = ""
+        self.__checkComPort()
+
     def __activateProcess(self, scheduleId):
         self.scheduler.loadScheduleNumber(scheduleId)
+        if not self.scheduler.isCommunicationOnGoing():
+            return
         self.backgroundProcessId = self.root.after(1, self.__proceedProcess)
-
+        self.__updateStatusMessage(True)
+        self.__disableAllButtons()
+    def __checkComPort(self):
+        if not self.scheduler.isInitialSettingsApplied():
+            self.top = Toplevel()
+            self.top.title("Изберете COM порт")
+            self.label1 = Label(self.top, text="Въведете номера на COM порта (вижте в 'Device Manager')", height=0, width=50)
+            self.label1.pack()
+            self.textEntry = Entry(self.top)
+            self.textEntry.pack()
+            self.button = Button(self.top, text="Ok", command=self.__setComPort)
+            self.button.pack()
+        else:
+            pass
+    def __setComPort(self):
+        self.scheduler.setComPort(self.textEntry.get())
+        self.top.destroy()
+        pass
     def __proceedProcess(self):
         self.scheduler.checkTime()
         if self.scheduler.isScheduleComplited():
+            self.root.after_cancel(self.statusMessageProcessId)
+            self.__updateStatusMessage(False)
             print("Schedule complited!")
+            self.__enableAllButtons()
             return
         else:
             self.backgroundProcessId = self.root.after(10, self.__proceedProcess)
+            
+    def __updateStatusMessage(self, isEnabled):
+        if not isEnabled:
+            self.statusMessage["text"] = "Учебните занятия са приключили!"
+            self.statusMessage["fg"] = "red"
+            return
+        
+        # Get the current message
+        currentStatus = self.statusMessage["text"]
+        currentStatus
+        if currentStatus.endswith("...") or len(currentStatus) is 0: 
+            currentStatus = "Учебните занятия са започнали"
+        else: 
+            currentStatus += "."
+        
+        # Update the message
+        self.statusMessage["text"] = currentStatus
+        
+        # After 1 second, update the status
+        self.statusMessageProcessId = self.root.after(250,lambda: self.__updateStatusMessage(True))
         
     def onExit(self):
         print("Closing application")
-        '''
-        f = open("settings.cfg", 'w')
-	    max_points = int(self.arduino.max_points)
-        com_port = int(self.arduino.get_comport())
-        json.dump(json.dumps([["comport",com_port],["maxpoints",max_points]]), f)
-        f.flush()
-        f.close() 
-        '''
-
         self.scheduler.releaseResourses()
         root.destroy()
-
+    def __disableAllButtons(self):
+        self.buttonSchedule1["state"] = DISABLED
+        self.buttonSchedule2["state"] = DISABLED
+        self.buttonSchedule3["state"] = DISABLED
+        self.buttonSchedule4["state"] = DISABLED
+        self.buttonSchedule5["state"] = DISABLED
+        self.buttonSchedule6["state"] = DISABLED
+    def __enableAllButtons(self):
+        self.buttonSchedule1["state"] = NORMAL
+        self.buttonSchedule2["state"] = NORMAL
+        self.buttonSchedule3["state"] = NORMAL
+        self.buttonSchedule4["state"] = NORMAL
+        self.buttonSchedule5["state"] = NORMAL
+        self.buttonSchedule6["state"] = NORMAL
+    
 class ScheduleSupervisor:
     def __init__(self):
         self.listOfScheduleElements = deque()
         self.arduino = Arduino(PORT, BAUD)
-        # self.arduinoPort = PORT
-        #To Do:Read settings for com port 
-        pass
+        if self.isInitialSettingsApplied():
+            self.arduino.set_comport_str(self.__loadComSettings())
+            self.__initialiseCommunication()
+    def isCommunicationOnGoing(self):
+        return self.arduino.connected  
     def loadScheduleNumber(self, number):
         #Check is the number from 1 to 6
         if number < 1 or number > 6:
@@ -83,18 +137,6 @@ class ScheduleSupervisor:
             elementDisableBell = ScheduleElement(stopTimeObject, False)
             self.listOfScheduleElements.append(elementEnableBell)
             self.listOfScheduleElements.append(elementDisableBell)
-           
-            #deltaTime =  stopTimeObject - today
-            #print(deltaTime.days)
-            #print(deltaTime.total_seconds())
-            #if deltaTime.days < 0 or deltaTime.seconds:
-            #    pass
-            #print(deltaTime.seconds - deltaTime.max.seconds)
-            #print(deltaTime.days)
-           
-            #startScheduleElement = ScheduleElement()
-            #stopScheduleElement = ScheduleElement()
-            #self.listOfScheduleElements.append()
         scheduleInputFile.close() 
     def releaseResourses(self):
         #disconnect arduino board serial communication
@@ -102,19 +144,25 @@ class ScheduleSupervisor:
         self.arduino.stop_communication()
         pass
     def isInitialSettingsApplied(self):
-        #check for COMport setting file
-        pass
-    def setComSettings(self, com):
-        pass
-    def __checkCommunicationStatus(self):
-        #checking is arduino connected by serial
-        pass
+        settingsFileName = "settings.cfg"
+        if not os.path.isfile(settingsFileName) or os.path.getsize(settingsFileName) < 0:
+            return False
+        else:
+            return True
+    def setComPort(self, comNumber):
+        settingsFile = open("settings.cfg", 'w')
+        settingsFile.write(str(comNumber))
+        self.arduino.set_comport_str(comNumber)
+        self.__initialiseCommunication()
     def __initialiseCommunication(self):
         #start serial com by invocing arduinoBoard object method
-        pass
+        self.arduino.start_communication()
+
     def __loadComSettings(self):
         #if COMport settings exists, this method loads them from file
-        pass
+        settingsFile = open("settings.cfg", 'r')
+        self.arduino.set_comport_str(settingsFile.readline())
+        settingsFile.close()
     def __popExpiredElements(self):
         bellNewState = False
         expiredElementsCount = 0
@@ -151,41 +199,6 @@ class ScheduleSupervisor:
             return True
         else:
             return False
-    '''
-	def deserialize_settings(self):
-        print("deser")
-        try:
-            f = open("settings.cfg", 'r')
-        except FileNotFoundError:
-            f = open("settings.cfg", 'w')
-            json.dump(json.dumps([["comport",60],["maxpoints",10]]), f)
-            f.flush()
-            f.close()
-        
-        f = open("settings.cfg", 'r')
-        try:
-            deser = json.load(f)
-        except ValueError:
-            f = open("settings.cfg", 'w')
-            json.dump(json.dumps([["comport",60],["maxpoints",10]]), f)
-            f.flush()
-        f = open("settings.cfg", 'r')
-        deser = json.load(f)
-        f.close()
-        return json.loads(deser)      
-	def set_comport_to_arduino(self, event):
-        try:
-            float(com_port)
-            if int(comport):
-                raise ValueError
-        except ValueError:
-            self.comport_entry.delete(0, END)
-            return False
-        
-        self.arduino.set_comport(int(com_port))
-        print("Arduino comport: " + com_port)
-        return True 
-        '''
     
     
 class ScheduleElement:
