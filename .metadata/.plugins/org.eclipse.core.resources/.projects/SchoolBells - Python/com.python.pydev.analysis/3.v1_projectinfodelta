@@ -1,0 +1,20 @@
+INSTUParduinocom
+C:\Users\Work\Desktop\SchoolBells\PySchoolBells\SchoolBells - Python\arduinocom.py
+INFOS:&&1|1|2|0&&2|3|2|1&&3|4|2|5&&3|6|2|5&&3|7|2|5&&2|8|2|1&&3|4|2|9&&3|4|2|9&&2|10|2|1&&3|4|2|11&&2|12|2|1&&3|7|2|13&&2|14|2|1&&3|7|2|15&&2|16|2|1&&2|17|2|1
+start_communication=8
+Arduino.stop_bell=15
+connected=4
+Arduino.start_communication=9
+get_comport_int=17
+Arduino.ring_bell=13
+ring_bell=12
+Arduino.stop_communication=11
+stop_bell=14
+__init__=3
+bellState=7
+stop_communication=10
+Arduino=1
+Arduino.__init__=5
+arduinocom=2
+set_comport_str=16
+serial=6

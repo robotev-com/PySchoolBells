@@ -114,7 +114,7 @@ class ScheduleSupervisor:
         self.listOfScheduleElements = deque()
         self.arduino = Arduino(PORT, BAUD)
         if self.isInitialSettingsApplied():
-            self.__loadComSettings()
+            self.arduino.set_comport_str(self.__loadComSettings())
             self.__initialiseCommunication()
     def isCommunicationOnGoing(self):
         return self.arduino.connected  
@@ -161,6 +161,7 @@ class ScheduleSupervisor:
     def __loadComSettings(self):
         #if COMport settings exists, this method loads them from file
         settingsFile = open("settings.cfg", 'r')
+        print(settingsFile.readline())
         self.arduino.set_comport_str(settingsFile.readline())
         settingsFile.close()
     def __popExpiredElements(self):

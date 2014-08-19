@@ -42,7 +42,7 @@ class Arduino:
         self.serial.flush()
         self.bellState = False
     def set_comport_str(self, comport_number):
-        self.serial.port = "COM"+ comport_number
+        self.serial.port = "COM"+ str(comport_number)
     def get_comport_int(self):
         comport_str = self.serial.port
         comport_str = comport_str.replace("COM", "")

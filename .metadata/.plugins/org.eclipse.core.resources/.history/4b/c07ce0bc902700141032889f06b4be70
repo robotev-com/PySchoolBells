@@ -114,7 +114,7 @@ class ScheduleSupervisor:
         self.listOfScheduleElements = deque()
         self.arduino = Arduino(PORT, BAUD)
         if self.isInitialSettingsApplied():
-            self.__loadComSettings()
+            self.arduino.set_comport_str(self.__loadComSettings())
             self.__initialiseCommunication()
     def isCommunicationOnGoing(self):
         return self.arduino.connected  
