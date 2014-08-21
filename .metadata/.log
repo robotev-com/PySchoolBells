@@ -312,3 +312,52 @@ java.lang.RuntimeException: Finished restoring information for: C:\Program Files
 
 !ENTRY org.python.pydev.shared_core 4 4 2014-08-19 13:54:32.135
 !MESSAGE Info: Rebuilding internal caches: C:\Users\Work\Desktop\SchoolBells\PySchoolBells\.metadata\.plugins\com.python.pydev.analysis\python_v1_cxk44lzfofijdix2q4rakolpn\python.pydevsysteminfo (Expected error to be provided and got no error!)
+!SESSION 2014-08-21 16:25:19.566 -----------------------------------------------
+eclipse.buildId=4.3.2.M20140221-1700
+java.version=1.7.0_51
+java.vendor=Oracle Corporation
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_US
+Framework arguments:  -product org.eclipse.epp.package.standard.product
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 -product org.eclipse.epp.package.standard.product
+
+!ENTRY org.eclipse.egit.ui 2 0 2014-08-21 16:25:44.958
+!MESSAGE Warning: EGit couldn't detect the installation path "gitPrefix" of native Git. Hence EGit can't respect system level
+Git settings which might be configured in ${gitPrefix}/etc/gitconfig under the native Git installation directory.
+The most important of these settings is core.autocrlf. Git for Windows by default sets this parameter to true in
+this system level configuration. The Git installation location can be configured on the
+Team > Git > Configuration preference page's 'System Settings' tab.
+This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
+
+!ENTRY org.eclipse.egit.ui 2 0 2014-08-21 16:25:44.964
+!MESSAGE Warning: The environment variable HOME is not set. The following directory will be used to store the Git
+user global configuration and to define the default location to store repositories: 'C:\Users\Work'. If this is
+not correct please set the HOME environment variable and restart Eclipse. Otherwise Git for Windows and
+EGit might behave differently since they see different configuration options.
+This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
+
+!ENTRY org.python.pydev.shared_core 4 4 2014-08-21 16:36:50.480
+!MESSAGE java.io.FileNotFoundException: C:\Program Files x86\Python34\lib\ntpath.py (The system cannot find the path specified)
+!STACK 0
+java.lang.RuntimeException: java.io.FileNotFoundException: C:\Program Files x86\Python34\lib\ntpath.py (The system cannot find the path specified)
+	at org.python.pydev.editor.refactoring.PyRefactoringFindDefinition.findActualDefinition(PyRefactoringFindDefinition.java:86)
+	at com.python.pydev.refactoring.refactorer.RefactorerFindDefinition.findDefinition(RefactorerFindDefinition.java:61)
+	at com.python.pydev.refactoring.refactorer.Refactorer.findDefinition(Refactorer.java:114)
+	at com.python.pydev.refactoring.wizards.rename.PyRenameEntryPoint.checkInitialConditions(PyRenameEntryPoint.java:232)
+	at com.python.pydev.refactoring.markoccurrences.MarkOccurrencesJob.createRequest(MarkOccurrencesJob.java:102)
+	at org.python.pydev.shared_ui.mark_occurrences.BaseMarkOccurrencesJob.run(BaseMarkOccurrencesJob.java:168)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:53)
+Caused by: java.io.FileNotFoundException: C:\Program Files x86\Python34\lib\ntpath.py (The system cannot find the path specified)
+	at java.io.FileInputStream.open(Native Method)
+	at java.io.FileInputStream.<init>(Unknown Source)
+	at org.python.pydev.core.FileUtilsFileBuffer.getCustomReturnFromFile(FileUtilsFileBuffer.java:170)
+	at org.python.pydev.core.FileUtilsFileBuffer.getDocFromFile(FileUtilsFileBuffer.java:132)
+	at org.python.pydev.core.FileUtilsFileBuffer.getDocFromFile(FileUtilsFileBuffer.java:75)
+	at org.python.pydev.editor.codecompletion.revisited.modules.AbstractModule.createModule(AbstractModule.java:272)
+	at org.python.pydev.editor.codecompletion.revisited.modules.CompiledModule.findDefinition(CompiledModule.java:624)
+	at org.python.pydev.editor.codecompletion.revisited.modules.CompiledModule.findDefinition(CompiledModule.java:1)
+	at org.python.pydev.editor.codecompletion.revisited.modules.SourceModule.findDefinition(SourceModule.java:887)
+	at org.python.pydev.editor.codecompletion.revisited.modules.SourceModule.findDefinition(SourceModule.java:664)
+	at org.python.pydev.editor.codecompletion.revisited.modules.SourceModule.findDefinition(SourceModule.java:1)
+	at org.python.pydev.editor.refactoring.PyRefactoringFindDefinition.findActualDefinition(PyRefactoringFindDefinition.java:177)
+	at org.python.pydev.editor.refactoring.PyRefactoringFindDefinition.findActualDefinition(PyRefactoringFindDefinition.java:79)
+	... 6 more

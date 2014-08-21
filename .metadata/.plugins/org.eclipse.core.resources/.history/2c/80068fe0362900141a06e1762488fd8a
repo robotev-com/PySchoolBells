@@ -123,7 +123,7 @@ class ScheduleSupervisor:
         if number < 1 or number > 6:
             return False
         #Check if file exists and if its empty
-        scheduleFileName = "Schedule"+str(number)+".txt"
+        scheduleFileName = "Програма"+str(number)+".txt"
         if not os.path.isfile(scheduleFileName) or os.path.getsize(scheduleFileName) < 0:
             return False
         scheduleInputFile = open(scheduleFileName, "r")
@@ -213,7 +213,7 @@ class ScheduleElement:
 
     
 root = Tk()
-root.wm_title("School Bells")
+root.wm_title("School Bell")
 root.resizable(width=FALSE, height=FALSE)
 root.wm_iconbitmap(bitmap = "bell_icon.ico")
 

@@ -1,6 +1,6 @@
 const byte noSerialLed = 13;
 const byte noSerialBlinkDelay = 50;
-const byte bellPin = 2;
+const byte bellPin = 10;
 
 void setup() 
 {
@@ -8,7 +8,7 @@ void setup()
     pinMode(bellPin, OUTPUT);
 
     Serial.begin(9600);
-    while (!Serial)
+    while (!Serial.available())
     {
         digitalWrite(noSerialLed, HIGH);
         delay(noSerialBlinkDelay);
